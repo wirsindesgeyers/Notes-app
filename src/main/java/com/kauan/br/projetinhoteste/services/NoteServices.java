@@ -22,20 +22,27 @@ public class NoteServices {
 
     //procurar nota por id
     public Optional<Note> getNoteById(Long id){
-        return notesRepository.findById(id);
+            return notesRepository.findById(id);
+
     }
 
+    public List<Note> getAllNotes(Long id){
+        return notesRepository.findAll();
+    }
+
+
     //deletar nota por id
-    public void deleteNoteById(Long id){
+    public void deleteNote(Long id){
         if(notesRepository.findById(id).isPresent()){
             notesRepository.deleteById(id);
         }
     }
-
-    //Salvar a nota
-    public Note saveNote(Note unsavedNote){
+    
+    //Criar a nota
+    public Note createNote(Note unsavedNote){
         return notesRepository.save(unsavedNote);
     }
+
 
 
 }
