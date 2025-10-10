@@ -3,10 +3,10 @@
 API RESTful desenvolvida em **Java com Spring Boot**, com o objetivo de gerenciar notas de forma simples, aplicando arquitetura **MVC** e boas práticas de desenvolvimento **back-end**.
 
 ## 🚀 Tecnologias Utilizadas
-- **Java 17+**
+- **Java 21**
 - **Spring Boot**
 - **Spring Data JPA**
-- **SQLite / MySQL**
+- **PostgreSQL**
 - **Maven**
 
 ## 🧠 Conceitos aplicados
