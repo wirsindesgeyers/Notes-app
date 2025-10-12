@@ -1,66 +1,58 @@
 package com.kauan.br.projetinhoteste.controller;
 
-
 import com.kauan.br.projetinhoteste.model.Note;
 import com.kauan.br.projetinhoteste.services.NoteServices;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping ("/notes")
 public class NotesController {
 
-    @Autowired
-    private NoteServices noteServices;
 
-    //cria a anotação
+    private final NoteServices noteServices;
+
+    public NotesController(NoteServices noteServices) {
+        this.noteServices = noteServices;
+    }
+
+
+    // criar notas
     @PostMapping
-    public ResponseEntity CreateNote(@RequestBody Note newNote){
-
+    public ResponseEntity<Note> createNote(@RequestBody Note newNote){
         Note savedNote = noteServices.createNote(newNote);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedNote);
     }
 
-
-
-    //pega a anotação pelo id
+    //procurar nota
     @GetMapping("/{id}")
     public ResponseEntity<Note> findNoteById(@PathVariable Long id) {
-        Optional<Note> note = noteServices.getNoteById(id);
-
-        if (note.isPresent()) {
-            return ResponseEntity.ok(note.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Note note = noteServices.getNoteById(id);
+        return ResponseEntity.ok(note);
     }
 
+    //deletar nota
     @DeleteMapping("/{id}")
-    public ResponseEntity<Note> deleteNoteById(@PathVariable Long id){
-        Optional<Note> note;
-        if(noteServices.getNoteById(id).isPresent()){
-            noteServices.deleteNote(id);
-            return ResponseEntity.noContent().build();
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> deleteNoteById(@PathVariable Long id){
+        noteServices.deleteNote(id);
+        return ResponseEntity.noContent().build();
     }
 
 
     //pegar todas as notas
     @GetMapping
     public ResponseEntity<List<Note>> getAllNotes(){
-        List<Note> note = noteServices.getAllNotes();
-        
-        return ResponseEntity.ok().body(note);
+        List<Note> notes = noteServices.getAllNotes();
+        return ResponseEntity.ok(notes);
     }
 
-
+    //editar nota
+    @PutMapping ("/{id}")
+    public ResponseEntity<Note> editNote(@PathVariable Long id, @RequestBody Note noteContent){
+        Note updatedNote = noteServices.editNote(noteContent, id);
+        return ResponseEntity.ok(updatedNote);
+    }
 }
-
-
