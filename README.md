@@ -8,6 +8,8 @@ API RESTful desenvolvida em **Java com Spring Boot**, com o objetivo de gerencia
 - **Spring Data JPA**
 - **PostgreSQL**
 - **Maven**
+- **Flyway**
+- **Spring Security**
 
 ## 🧠 Conceitos aplicados
 - CRUD completo (Create, Read, Update, Delete)
