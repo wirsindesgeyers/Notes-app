@@ -1,48 +1,53 @@
 package com.kauan.br.projetinhoteste.services;
 
-import com.kauan.br.projetinhoteste.model.Note;
-import com.kauan.br.projetinhoteste.repository.NotesRepository;
+import com.kauan.br.projetinhoteste.exceptions.ResourceNotFoundException;
+import com.kauan.br.projetinhoteste.model.note.Note;
+import com.kauan.br.projetinhoteste.repository.NoteRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class NoteServices {
 
-    private final NotesRepository notesRepository;
+    private final NoteRepository noteRepository;
 
-    public NoteServices(NotesRepository notesRepository) {
-        this.notesRepository = notesRepository;
+
+    public NoteServices(NoteRepository noteRepository) {
+        this.noteRepository = noteRepository;
     }
 
-    //buscar todas as notas
+    //retorna todas as notas
     public List<Note> getAllNotes() {
-        return notesRepository.findAll();
+        return noteRepository.findAll();
     }
 
-    //procurar nota por id
-    public Optional<Note> getNoteById(Long id){
-            return notesRepository.findById(id);
-
+    //retorna a nota pelo id
+    public Note getNoteById(Long id){
+        return noteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Anotação com o ID " + id + " não foi encontrada."));
     }
 
-    public List<Note> getAllNotes(Long id){
-        return notesRepository.findAll();
-    }
-
-
-    //deletar nota por id
+    //deleta a nota
     public void deleteNote(Long id){
-        if(notesRepository.findById(id).isPresent()){
-            notesRepository.deleteById(id);
+        if(!noteRepository.existsById(id)){
+            throw new ResourceNotFoundException("Impossível deletar. Anotação com o ID " + id + " não foi encontrada.");
         }
+        noteRepository.deleteById(id);
     }
-    
-    //Criar a nota
+
+    //cria a nota
     public Note createNote(Note unsavedNote){
-        return notesRepository.save(unsavedNote);
+        return noteRepository.save(unsavedNote);
     }
 
+    //edita a nota
+    public Note editNote(Note noteWithNewData, Long id){
+        Note noteToUpdate = getNoteById(id);
 
+        noteToUpdate.setTitle(noteWithNewData.getTitle());
+        noteToUpdate.setContent(noteWithNewData.getContent());
 
+        return noteRepository.save(noteToUpdate);
+    }
 }

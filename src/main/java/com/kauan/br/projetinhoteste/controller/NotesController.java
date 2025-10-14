@@ -1,66 +1,79 @@
 package com.kauan.br.projetinhoteste.controller;
 
-
-import com.kauan.br.projetinhoteste.model.Note;
+import com.kauan.br.projetinhoteste.model.note.Note;
+import com.kauan.br.projetinhoteste.model.note.dtos.NoteRequestDTO;
+import com.kauan.br.projetinhoteste.model.note.dtos.NoteResponseDTO;
 import com.kauan.br.projetinhoteste.services.NoteServices;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping ("/notes")
 public class NotesController {
 
-    @Autowired
-    private NoteServices noteServices;
 
-    //cria a anotação
+    private final NoteServices noteServices;
+
+    public NotesController(NoteServices noteServices) {
+        this.noteServices = noteServices;
+    }
+
+
+    // criar notas
     @PostMapping
-    public ResponseEntity CreateNote(@RequestBody Note newNote){
+    public ResponseEntity<NoteResponseDTO> createNote(@RequestBody NoteRequestDTO requestDTO){
+        Note newNote = new Note();
+
+        newNote.setContent(requestDTO.content());
+        newNote.setTitle(requestDTO.title());
 
         Note savedNote = noteServices.createNote(newNote);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedNote);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new NoteResponseDTO(savedNote));
     }
 
-
-
-    //pega a anotação pelo id
+    //procurar nota
     @GetMapping("/{id}")
-    public ResponseEntity<Note> findNoteById(@PathVariable Long id) {
-        Optional<Note> note = noteServices.getNoteById(id);
+    public ResponseEntity<NoteResponseDTO> findNoteById(@PathVariable Long id) {
 
-        if (note.isPresent()) {
-            return ResponseEntity.ok(note.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Note note = noteServices.getNoteById(id);
+
+        return ResponseEntity.ok(new NoteResponseDTO(note));
     }
 
+    //deletar nota
     @DeleteMapping("/{id}")
-    public ResponseEntity<Note> deleteNoteById(@PathVariable Long id){
-        Optional<Note> note;
-        if(noteServices.getNoteById(id).isPresent()){
-            noteServices.deleteNote(id);
-            return ResponseEntity.noContent().build();
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> deleteNoteById(@PathVariable Long id){
+        noteServices.deleteNote(id);
+        return ResponseEntity.noContent().build();
     }
 
 
     //pegar todas as notas
     @GetMapping
-    public ResponseEntity<List<Note>> getAllNotes(){
-        List<Note> note = noteServices.getAllNotes();
-        
-        return ResponseEntity.ok().body(note);
+    public ResponseEntity<List<NoteResponseDTO>> getAllNotes(){
+        List<Note> notes = noteServices.getAllNotes();
+        List<NoteResponseDTO> notesResponseDto = notes.stream()
+                .map(NoteResponseDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(notesResponseDto);
     }
 
+    //editar nota
+    @PutMapping ("/{id}")
+    public ResponseEntity<NoteResponseDTO> editNote(@PathVariable Long id, @RequestBody NoteRequestDTO noteRequestDTO){
+        Note noteContent = new Note();
 
+        noteContent.setTitle(noteRequestDTO.title());
+
+        noteContent.setContent(noteRequestDTO.content());
+
+        Note updatedNote = noteServices.editNote(noteContent, id);
+        return ResponseEntity.ok(new NoteResponseDTO(updatedNote));
+    }
 }
-
-
