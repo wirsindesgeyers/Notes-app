@@ -13,7 +13,6 @@ API RESTful desenvolvida em **Java com Spring Boot**, com o objetivo de gerencia
 - CRUD completo (Create, Read, Update, Delete)
 - Arquitetura em camadas: Controller, Service, Repository e Model
 - Uso de `ResponseEntity` para respostas HTTP semânticas
-- Manipulação de `Optional` para evitar `NullPointerException`
 - Integração com banco de dados via ORM (JPA)
 - Boas práticas de versionamento com Git
 
