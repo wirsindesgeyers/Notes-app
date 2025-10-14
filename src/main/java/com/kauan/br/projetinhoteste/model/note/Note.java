@@ -1,4 +1,4 @@
-package com.kauan.br.projetinhoteste.model;
+package com.kauan.br.projetinhoteste.model.note;
 
 import jakarta.persistence.Entity;
 import lombok.Getter;

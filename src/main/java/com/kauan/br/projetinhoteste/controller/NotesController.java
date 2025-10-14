@@ -1,12 +1,15 @@
 package com.kauan.br.projetinhoteste.controller;
 
-import com.kauan.br.projetinhoteste.model.Note;
+import com.kauan.br.projetinhoteste.model.note.Note;
+import com.kauan.br.projetinhoteste.model.note.dtos.NoteRequestDTO;
+import com.kauan.br.projetinhoteste.model.note.dtos.NoteResponseDTO;
 import com.kauan.br.projetinhoteste.services.NoteServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping ("/notes")
@@ -22,16 +25,24 @@ public class NotesController {
 
     // criar notas
     @PostMapping
-    public ResponseEntity<Note> createNote(@RequestBody Note newNote){
+    public ResponseEntity<NoteResponseDTO> createNote(@RequestBody NoteRequestDTO requestDTO){
+        Note newNote = new Note();
+
+        newNote.setContent(requestDTO.content());
+        newNote.setTitle(requestDTO.title());
+
         Note savedNote = noteServices.createNote(newNote);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedNote);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new NoteResponseDTO(savedNote));
     }
 
     //procurar nota
     @GetMapping("/{id}")
-    public ResponseEntity<Note> findNoteById(@PathVariable Long id) {
+    public ResponseEntity<NoteResponseDTO> findNoteById(@PathVariable Long id) {
+
         Note note = noteServices.getNoteById(id);
-        return ResponseEntity.ok(note);
+
+        return ResponseEntity.ok(new NoteResponseDTO(note));
     }
 
     //deletar nota
@@ -44,15 +55,25 @@ public class NotesController {
 
     //pegar todas as notas
     @GetMapping
-    public ResponseEntity<List<Note>> getAllNotes(){
+    public ResponseEntity<List<NoteResponseDTO>> getAllNotes(){
         List<Note> notes = noteServices.getAllNotes();
-        return ResponseEntity.ok(notes);
+        List<NoteResponseDTO> notesResponseDto = notes.stream()
+                .map(NoteResponseDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(notesResponseDto);
     }
 
     //editar nota
     @PutMapping ("/{id}")
-    public ResponseEntity<Note> editNote(@PathVariable Long id, @RequestBody Note noteContent){
+    public ResponseEntity<NoteResponseDTO> editNote(@PathVariable Long id, @RequestBody NoteRequestDTO noteRequestDTO){
+        Note noteContent = new Note();
+
+        noteContent.setTitle(noteRequestDTO.title());
+
+        noteContent.setContent(noteRequestDTO.content());
+
         Note updatedNote = noteServices.editNote(noteContent, id);
-        return ResponseEntity.ok(updatedNote);
+        return ResponseEntity.ok(new NoteResponseDTO(updatedNote));
     }
 }

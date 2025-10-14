@@ -1,9 +1,8 @@
 package com.kauan.br.projetinhoteste.services;
 
 import com.kauan.br.projetinhoteste.exceptions.ResourceNotFoundException;
-import com.kauan.br.projetinhoteste.model.Note;
+import com.kauan.br.projetinhoteste.model.note.Note;
 import com.kauan.br.projetinhoteste.repository.NoteRepository;
-import com.kauan.br.projetinhoteste.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
