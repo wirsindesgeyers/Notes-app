@@ -1,7 +1,9 @@
 package com.kauan.br.projetinhoteste.model.note;
 
 import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
@@ -10,6 +12,8 @@ import jakarta.persistence.GenerationType;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "tb_notes")
 public class Note {
@@ -22,13 +26,6 @@ public class Note {
 
     private String content;
 
-    public Note() {
-    }
 
-    public Note(Long id, String title, String content) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-    }
 
 }

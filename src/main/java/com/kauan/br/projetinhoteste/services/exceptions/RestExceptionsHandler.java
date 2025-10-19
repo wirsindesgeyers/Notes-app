@@ -16,5 +16,10 @@ public class RestExceptionsHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nota não foi encontrada.");
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    private ResponseEntity<String> illegalStateExceptionHandler(IllegalStateException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
 
 }
