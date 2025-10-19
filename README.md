@@ -17,6 +17,7 @@ API RESTful desenvolvida em **Java com Spring Boot**, com o objetivo de gerencia
 - Uso de `ResponseEntity` para respostas HTTP semânticas
 - Integração com banco de dados via ORM (JPA)
 - Boas práticas de versionamento com Git
+- Autenticação via JWT
 
 ## 🧩 Endpoints principais
 | Método | Endpoint | Descrição |
