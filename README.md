@@ -22,6 +22,8 @@ API RESTful desenvolvida em **Java com Spring Boot**, com o objetivo de gerencia
 ## 🧩 Endpoints principais
 | Método | Endpoint | Descrição |
 |--------|-----------|-----------|
+| POST | `/auth/register` | Registra um usuário |
+| POST | `/auth/login` | Loga um usuário já existente |
 | POST | `/notes` | Cria uma nova nota |
 | GET | `/notes` | Lista todas as notas |
 | GET | `/notes/{id}` | Busca uma nota específica |
