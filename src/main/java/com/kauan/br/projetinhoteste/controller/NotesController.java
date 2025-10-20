@@ -26,14 +26,10 @@ public class NotesController {
     // criar notas
     @PostMapping
     public ResponseEntity<NoteResponseDTO> createNote(@RequestBody NoteRequestDTO requestDTO){
-        Note newNote = new Note();
 
-        newNote.setContent(requestDTO.content());
-        newNote.setTitle(requestDTO.title());
+        NoteResponseDTO savedNote = noteServices.createNote(requestDTO);
 
-        Note savedNote = noteServices.createNote(newNote);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(new NoteResponseDTO(savedNote));
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedNote);
     }
 
     //procurar nota
@@ -67,13 +63,9 @@ public class NotesController {
     //editar nota
     @PutMapping ("/{id}")
     public ResponseEntity<NoteResponseDTO> editNote(@PathVariable Long id, @RequestBody NoteRequestDTO noteRequestDTO){
-        Note noteContent = new Note();
 
-        noteContent.setTitle(noteRequestDTO.title());
+        NoteResponseDTO updatedNote = noteServices.editNote(noteRequestDTO, id);
 
-        noteContent.setContent(noteRequestDTO.content());
-
-        Note updatedNote = noteServices.editNote(noteContent, id);
-        return ResponseEntity.ok(new NoteResponseDTO(updatedNote));
+        return ResponseEntity.ok((updatedNote));
     }
 }

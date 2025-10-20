@@ -1,5 +1,6 @@
 package com.kauan.br.projetinhoteste.configuration;
 
+import com.kauan.br.projetinhoteste.model.user.User;
 import com.kauan.br.projetinhoteste.repository.UserRepository;
 import com.kauan.br.projetinhoteste.services.AuthorizationService;
 import com.kauan.br.projetinhoteste.services.TokenService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -32,12 +34,19 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
 
         if(token != null){
-            var subject = tokenService.validateToken(token);
-            UserDetails user = userRepository.findByLogin(subject);
+            var login = tokenService.validateToken(token);
 
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            Optional<User> userOptional = userRepository.findByLogin(login);
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (userOptional.isPresent()) {
+                UserDetails user = userOptional.get();
+
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                System.out.println(">>> SecurityFilter: Token válido, mas usuário " + login + " não encontrado no banco de dados.");
+                SecurityContextHolder.clearContext();
+            }
         }
         filterChain.doFilter(request, response);
     }

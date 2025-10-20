@@ -1,10 +1,9 @@
 package com.kauan.br.projetinhoteste.model.note;
 
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +13,7 @@ import jakarta.persistence.GenerationType;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name = "tb_notes")
 public class Note {
@@ -27,5 +27,6 @@ public class Note {
     private String content;
 
 
-
+    public Note(@NotBlank(message = "O título não pode estar em branco") @Size(max = 100, message = "O título não pode exceder 100 caracteres") String title, String content) {
+    }
 }

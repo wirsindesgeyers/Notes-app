@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthorizationService implements UserDetailsService {
@@ -20,11 +22,9 @@ public class AuthorizationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails user = userRepository.findByLogin(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("Usuário não encontrado.");
-        }
-        return user;
+        Optional<User> userOptional = userRepository.findByLogin(username);
+
+        return userOptional.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado."));
     }
 
     public void register(RegisterDTO dto){
