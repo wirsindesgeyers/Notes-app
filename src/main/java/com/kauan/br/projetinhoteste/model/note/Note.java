@@ -13,7 +13,6 @@ import jakarta.persistence.GenerationType;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "tb_notes")
 public class Note {

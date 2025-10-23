@@ -43,7 +43,9 @@ public class NoteServices {
         Note newNote = new Note();
 
         newNote.setTitle(dto.title());
+
         newNote.setContent(dto.content());
+
 
         Note savedNote = noteRepository.save(newNote);
 

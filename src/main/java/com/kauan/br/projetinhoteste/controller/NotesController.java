@@ -4,6 +4,7 @@ import com.kauan.br.projetinhoteste.model.note.Note;
 import com.kauan.br.projetinhoteste.model.note.dtos.NoteRequestDTO;
 import com.kauan.br.projetinhoteste.model.note.dtos.NoteResponseDTO;
 import com.kauan.br.projetinhoteste.services.NoteServices;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class NotesController {
 
     // criar notas
     @PostMapping
-    public ResponseEntity<NoteResponseDTO> createNote(@RequestBody NoteRequestDTO requestDTO){
+    public ResponseEntity<NoteResponseDTO> createNote(@RequestBody @Valid NoteRequestDTO requestDTO){
 
         NoteResponseDTO savedNote = noteServices.createNote(requestDTO);
 
@@ -62,10 +63,11 @@ public class NotesController {
 
     //editar nota
     @PutMapping ("/{id}")
-    public ResponseEntity<NoteResponseDTO> editNote(@PathVariable Long id, @RequestBody NoteRequestDTO noteRequestDTO){
+    public ResponseEntity<NoteResponseDTO> editNote(@PathVariable Long id, @RequestBody @Valid NoteRequestDTO noteRequestDTO){
 
         NoteResponseDTO updatedNote = noteServices.editNote(noteRequestDTO, id);
 
-        return ResponseEntity.ok((updatedNote));
+        return ResponseEntity.ok(updatedNote);
+
     }
 }
