@@ -9,7 +9,8 @@ public record NoteRequestDTO(
         @NotBlank(message = "O título não pode estar em branco")
         @Size(max = 100, message = "O título não pode exceder 100 caracteres")
         String title,
-        
+
+        @NotBlank(message = "O conteúdo não pode estar em branco")
         String content
 
 )

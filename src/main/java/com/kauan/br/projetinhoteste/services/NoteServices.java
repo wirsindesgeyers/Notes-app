@@ -2,6 +2,8 @@ package com.kauan.br.projetinhoteste.services;
 
 import com.kauan.br.projetinhoteste.exceptions.ResourceNotFoundException;
 import com.kauan.br.projetinhoteste.model.note.Note;
+import com.kauan.br.projetinhoteste.model.note.dtos.NoteRequestDTO;
+import com.kauan.br.projetinhoteste.model.note.dtos.NoteResponseDTO;
 import com.kauan.br.projetinhoteste.repository.NoteRepository;
 import org.springframework.stereotype.Service;
 
@@ -37,17 +39,30 @@ public class NoteServices {
     }
 
     //cria a nota
-    public Note createNote(Note unsavedNote){
-        return noteRepository.save(unsavedNote);
+    public NoteResponseDTO createNote(NoteRequestDTO dto){
+        Note newNote = new Note();
+
+        newNote.setTitle(dto.title());
+
+        newNote.setContent(dto.content());
+
+
+        Note savedNote = noteRepository.save(newNote);
+
+        return new NoteResponseDTO(savedNote);
     }
 
     //edita a nota
-    public Note editNote(Note noteWithNewData, Long id){
+    public NoteResponseDTO editNote(NoteRequestDTO dto, Long id){
         Note noteToUpdate = getNoteById(id);
 
-        noteToUpdate.setTitle(noteWithNewData.getTitle());
-        noteToUpdate.setContent(noteWithNewData.getContent());
+        noteToUpdate.setTitle(dto.title());
+        noteToUpdate.setContent(dto.content());
 
-        return noteRepository.save(noteToUpdate);
+        Note updatedNote = noteRepository.save(noteToUpdate);
+
+        return new NoteResponseDTO(updatedNote);
+
     }
+
 }
