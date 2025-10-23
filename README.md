@@ -10,6 +10,7 @@ API RESTful desenvolvida em **Java com Spring Boot**, com o objetivo de gerencia
 - **Maven**
 - **Flyway**
 - **Spring Security**
+- **JUnit & Mockito**
 
 ## 🧠 Conceitos aplicados
 - CRUD completo (Create, Read, Update, Delete)
@@ -18,6 +19,7 @@ API RESTful desenvolvida em **Java com Spring Boot**, com o objetivo de gerencia
 - Integração com banco de dados via ORM (JPA)
 - Boas práticas de versionamento com Git
 - Autenticação via JWT
+- Testes unitários via JUnit e Mockito
 
 ## 🧩 Endpoints principais
 | Método | Endpoint | Descrição |
